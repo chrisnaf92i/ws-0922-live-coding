@@ -12,7 +12,7 @@ import {
 import { SectionTitle } from "../../styles/base-styles";
 import { getErrorMessage } from "../../utils";
 
-const CREATE_WILDER = gql`
+export const CREATE_WILDER = gql`
   mutation CreateWilder($firstName: String!, $lastName: String!) {
     createWilder(firstName: $firstName, lastName: $lastName) {
       id
@@ -45,6 +45,7 @@ const CreateWilder = () => {
     <>
       <SectionTitle>Ajouter un nouveau Wilder</SectionTitle>
       <form
+        aria-label="form"
         onSubmit={async (event) => {
           event.preventDefault();
           await submit();
