@@ -28,17 +28,17 @@ const CreateWilder = () => {
   const [createWilder, { loading }] = useMutation<
     CreateWilderMutation,
     CreateWilderMutationVariables
-  >(CREATE_WILDER);
+  >(CREATE_WILDER, {
+    onError: (error) => {
+      toast.error(getErrorMessage(error));
+    },
+  });
 
   const submit = async () => {
-    try {
-      await createWilder({ variables: { firstName, lastName } });
-      toast.success(`Wilder ${firstName} ${lastName} créé avec succès.`);
-      setFirstName("");
-      setLastName("");
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-    }
+    await createWilder({ variables: { firstName, lastName } });
+    toast.success(`Wilder ${firstName} ${lastName} créé avec succès.`);
+    setFirstName("");
+    setLastName("");
   };
 
   return (
