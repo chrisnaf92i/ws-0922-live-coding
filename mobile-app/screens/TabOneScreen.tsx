@@ -1,22 +1,39 @@
-import { StyleSheet } from "react-native";
+import { gql, useQuery } from "@apollo/client";
+import { ScrollView, StyleSheet } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
+import { GetWildersQuery } from "../gql/graphql";
 import { RootTabScreenProps } from "../types";
+
+export const GET_WILDERS = gql`
+  query GetWilders {
+    wilders {
+      id
+      firstName
+      lastName
+      isApproved
+    }
+  }
+`;
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
+  const { loading, data, error } = useQuery<GetWildersQuery>(GET_WILDERS);
+
+  console.log({ loading, data });
+
   return (
     <View style={styles.container}>
       <Text style={styles.title} accessibilityRole="header">
-        Tab One
+        Wilders
       </Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <ScrollView>
+        {data?.wilders.map((wilder) => (
+          <View>{wilder.firstName}</View>
+        ))}
+      </ScrollView>
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
     </View>
   );
