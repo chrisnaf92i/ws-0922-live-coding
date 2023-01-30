@@ -50,6 +50,10 @@ export default class Wilder {
   @JoinTable()
   skills: Skill[];
 
+  @Column({ default: false })
+  @Field()
+  isApproved: boolean;
+
   @Field(() => String)
   getFullName() {
     return `${this.firstName} ${this.lastName}`;

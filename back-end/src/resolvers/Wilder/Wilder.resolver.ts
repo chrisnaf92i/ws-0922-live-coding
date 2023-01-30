@@ -26,6 +26,11 @@ export default class WilderResolver {
   }
 
   @Mutation(() => Wilder)
+  approveWilder(@Arg("id") id: string): Promise<Wilder> {
+    return WilderRepository.approveWilder(id);
+  }
+
+  @Mutation(() => Wilder)
   deleteWilder(@Arg("id") id: string): Promise<Wilder> {
     return WilderRepository.deleteWilder(id);
   }

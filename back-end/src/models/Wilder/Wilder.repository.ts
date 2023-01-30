@@ -62,6 +62,14 @@ export default class WilderRepository extends WilderDb {
     });
   }
 
+  static async approveWilder(id: string): Promise<Wilder> {
+    const existingWilder = await this.findWilderById(id);
+    if (!existingWilder) {
+      throw Error("No existing Wilder matching ID.");
+    }
+    return this.repository.save({ ...existingWilder, isApproved: true });
+  }
+
   static async deleteWilder(id: string): Promise<Wilder> {
     const existingWilder = await this.findWilderById(id);
     if (!existingWilder) {
