@@ -1,5 +1,7 @@
 import { Button, StyleSheet } from "react-native";
+
 import { Text } from "../Themed";
+import Icon from "./Icon";
 
 const WilderCard = ({
   id,
@@ -15,7 +17,7 @@ const WilderCard = ({
   return (
     <Text style={styles.wilderCard}>
       {firstName} {lastName}
-      <Button title="Approuver" />
+      {isApproved ? <Icon name="check" /> : <Button title="Approuver" />}
     </Text>
   );
 };
