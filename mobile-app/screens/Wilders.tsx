@@ -2,6 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { Button, ScrollView, StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
+import WilderCard from "../components/WilderCard/WilderCard";
 import { GetWildersQuery } from "../gql/graphql";
 import { RootTabScreenProps } from "../types";
 
@@ -26,10 +27,9 @@ export default function Wilders({ navigation }: RootTabScreenProps<"Wilders">) {
       </Text>
       <ScrollView style={styles.wilderList}>
         {data?.wilders.map((wilder) => (
-          <Text key={wilder.id} style={styles.wilderCard}>
-            {wilder.firstName}
-            <Button title="Approuver" />
-          </Text>
+          <View key={wilder.id}>
+            <WilderCard {...wilder} />
+          </View>
         ))}
       </ScrollView>
     </View>
@@ -50,17 +50,6 @@ const styles = StyleSheet.create({
   wilderList: {
     padding: 12,
     width: "100%",
-  },
-  wilderCard: {
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 4,
-    padding: 12,
-    marginTop: 12,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flex: 1,
   },
   separator: {
     marginVertical: 30,
