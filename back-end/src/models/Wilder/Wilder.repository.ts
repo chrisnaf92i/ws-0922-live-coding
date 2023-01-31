@@ -6,6 +6,7 @@ import SchoolRepository from "../School/School.repository";
 import Skill from "../Skill/Skill.entity";
 import SkillRepository from "../Skill/Skill.repository";
 import WilderDb from "./Wilder.db";
+import { sendPushNotification } from "../../push-notifications";
 
 export default class WilderRepository extends WilderDb {
   static async initializeWilders(): Promise<void> {
@@ -37,6 +38,12 @@ export default class WilderRepository extends WilderDb {
   ): Promise<Wilder> {
     const newWilder = this.repository.create({ firstName, lastName });
     await this.repository.save(newWilder);
+    sendPushNotification(
+      "ExponentPushToken[_l_rKDA9JwIu6wsTgf1m4e]",
+      "Nouveau wilder créé",
+      `Nouveau wilder : ${newWilder.getFullName()}`,
+      { action: "RefetchWilders" }
+    );
     return newWilder;
   }
 

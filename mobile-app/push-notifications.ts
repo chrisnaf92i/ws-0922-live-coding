@@ -58,12 +58,12 @@ export const usePushNotifications = () => {
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
+        setNotification(notification); // Déclenché lorsque l'application est active à la réception de la notification
       });
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        setNotification(response.notification); // Déclenché lorsque l'utilisateur clique sur la notification (quand l'application était inactive)
       });
 
     return () => {
