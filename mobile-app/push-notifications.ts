@@ -4,6 +4,14 @@ import { Subscription } from "expo-modules-core";
 import { useState, useRef, useEffect } from "react";
 import { Platform } from "react-native";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export async function registerForPushNotificationsAsync() {
   let token;
   if (Device.isDevice) {
@@ -71,4 +79,16 @@ export const usePushNotifications = () => {
   }, []);
 
   return { notification };
+};
+
+export const useActionUponNotification = (
+  notification: Notifications.Notification,
+  actionName: string,
+  callback: () => any
+) => {
+  useEffect(() => {
+    if (notification?.request.content.data.action === actionName) {
+      callback();
+    }
+  }, [notification]);
 };

@@ -1,9 +1,14 @@
 import { gql, useQuery } from "@apollo/client";
+import { useEffect } from "react";
 import { Button, ScrollView, StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
 import WilderCard from "../components/WilderCard/WilderCard";
 import { GetWildersQuery } from "../gql/graphql";
+import {
+  useActionUponNotification,
+  usePushNotifications,
+} from "../push-notifications";
 import { RootTabScreenProps } from "../types";
 
 export const GET_WILDERS = gql`
@@ -18,7 +23,11 @@ export const GET_WILDERS = gql`
 `;
 
 export default function Wilders({ navigation }: RootTabScreenProps<"Wilders">) {
-  const { loading, data, error } = useQuery<GetWildersQuery>(GET_WILDERS);
+  const { loading, data, error, refetch } =
+    useQuery<GetWildersQuery>(GET_WILDERS);
+
+  const { notification } = usePushNotifications();
+  useActionUponNotification(notification, "RefetchWilders", refetch);
 
   return (
     <View style={styles.container}>

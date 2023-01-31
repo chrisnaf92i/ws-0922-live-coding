@@ -18,19 +18,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-
-  const { notification } = usePushNotifications();
 
   if (!isLoadingComplete) {
     return null;
@@ -38,27 +28,6 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <ApolloProvider client={client}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "space-around",
-            }}
-          >
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Text>
-                Title: {notification && notification.request.content.title}{" "}
-              </Text>
-              <Text>
-                Body: {notification && notification.request.content.body}
-              </Text>
-              <Text>
-                Data:{" "}
-                {notification &&
-                  JSON.stringify(notification.request.content.data)}
-              </Text>
-            </View>
-          </View>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
         </ApolloProvider>
