@@ -1,14 +1,25 @@
-import { Arg, Args, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Args,
+  Ctx,
+  Float,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 
 import Wilder from "../../models/Wilder/Wilder.entity";
 import WilderRepository from "../../models/Wilder/Wilder.repository";
 import { CreateWilderArgs, UpdateWilderArgs } from "./Wilder.input";
 
+const PAGE_SIZE = 9;
+
 @Resolver(Wilder)
 export default class WilderResolver {
   @Query(() => [Wilder])
-  wilders(): Promise<Wilder[]> {
-    return WilderRepository.getWilders();
+  wilders(@Arg("pageNumber", () => Int) pageNumber: number): Promise<Wilder[]> {
+    return WilderRepository.getWilders(PAGE_SIZE, pageNumber);
   }
 
   @Mutation(() => Wilder)

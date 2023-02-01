@@ -7,11 +7,11 @@ import Loader from "../../components/Loader";
 import { SectionTitle } from "../../styles/base-styles";
 import { CREATE_WILDER_PATH } from "../paths";
 import { useQuery, gql } from "@apollo/client";
-import { GetWildersQuery } from "../../gql/graphql";
+import { GetWildersQuery, GetWildersQueryVariables } from "../../gql/graphql";
 
 export const GET_WILDERS = gql`
-  query GetWilders {
-    wilders {
+  query GetWilders($pageNumber: Int!) {
+    wilders(pageNumber: $pageNumber) {
       id
       firstName
       lastName
@@ -24,10 +24,13 @@ export const GET_WILDERS = gql`
 `;
 
 const Home = () => {
-  const { data, loading, error, refetch } = useQuery<GetWildersQuery>(
-    GET_WILDERS,
-    { fetchPolicy: "cache-and-network" }
-  );
+  const { data, loading, error, refetch } = useQuery<
+    GetWildersQuery,
+    GetWildersQueryVariables
+  >(GET_WILDERS, {
+    variables: { pageNumber: 1 },
+    fetchPolicy: "cache-and-network",
+  });
 
   const renderMainContent = () => {
     if (loading) {

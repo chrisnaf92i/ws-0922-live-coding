@@ -19,17 +19,22 @@ export default class WilderRepository extends WilderDb {
     )) as Skill;
     const phpSkill = (await SkillRepository.getSkillByName("PHP")) as Skill;
 
-    const jean = new Wilder("Jean", "Wilder", lyonSchool, [javaScriptSkill]);
-    const jeanne = new Wilder("Jeanne", "Wilder", lyonSchool, [
-      javaScriptSkill,
-      phpSkill,
-    ]);
+    const newWilders = Array.from(
+      { length: 1000 },
+      () => new Wilder("Jean", "Wilder", lyonSchool, [javaScriptSkill])
+    );
 
-    await this.repository.save([jean, jeanne]);
+    await this.repository.save(newWilders);
   }
 
-  static async getWilders(): Promise<Wilder[]> {
-    return this.repository.find();
+  static async getWilders(
+    pageSize: number,
+    pageNumber: number
+  ): Promise<Wilder[]> {
+    return this.repository.find({
+      take: pageSize,
+      skip: (pageNumber - 1) * pageSize,
+    });
   }
 
   static async createWilder(

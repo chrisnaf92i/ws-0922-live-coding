@@ -7,6 +7,7 @@ export const CardRow = styled.ul`
   justify-content: center;
 
   list-style-type: none;
+  padding-inline-start: unset;
 `;
 
 export const CardRowElement = styled.li`
