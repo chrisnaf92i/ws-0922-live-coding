@@ -21,7 +21,8 @@ export default class WilderRepository extends WilderDb {
 
     const newWilders = Array.from(
       { length: 1000 },
-      () => new Wilder("Jean", "Wilder", lyonSchool, [javaScriptSkill])
+      (_, index) =>
+        new Wilder(`Jean-${index}`, "Wilder", lyonSchool, [javaScriptSkill])
     );
 
     await this.repository.save(newWilders);
@@ -34,6 +35,7 @@ export default class WilderRepository extends WilderDb {
     return this.repository.find({
       take: pageSize,
       skip: (pageNumber - 1) * pageSize,
+      order: { firstName: "ASC" },
     });
   }
 

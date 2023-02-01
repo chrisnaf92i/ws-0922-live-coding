@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { CardRow, CardRowElement } from "./Home.styled";
@@ -24,16 +24,17 @@ export const GET_WILDERS = gql`
 `;
 
 const Home = () => {
+  const [pageNumber, setPageNumber] = useState(1);
   const { data, loading, error, refetch } = useQuery<
     GetWildersQuery,
     GetWildersQueryVariables
   >(GET_WILDERS, {
-    variables: { pageNumber: 1 },
+    variables: { pageNumber },
     fetchPolicy: "cache-and-network",
   });
 
   const renderMainContent = () => {
-    if (loading) {
+    if (!data && loading) {
       return <Loader role="status" />;
     }
     if (error) {
@@ -43,19 +44,32 @@ const Home = () => {
       return "Aucun wilder à afficher.";
     }
     return (
-      <CardRow data-testid="wilder-list">
-        {data.wilders.map((wilder) => (
-          <CardRowElement key={wilder.id} data-testid="wilder-list-element">
-            <Wilder
-              id={wilder.id}
-              firstName={wilder.firstName}
-              lastName={wilder.lastName}
-              skills={wilder.skills}
-              onDelete={refetch}
-            />
-          </CardRowElement>
-        ))}
-      </CardRow>
+      <>
+        <CardRow data-testid="wilder-list">
+          {data.wilders.map((wilder) => (
+            <CardRowElement key={wilder.id} data-testid="wilder-list-element">
+              <Wilder
+                id={wilder.id}
+                firstName={wilder.firstName}
+                lastName={wilder.lastName}
+                skills={wilder.skills}
+                onDelete={refetch}
+              />
+            </CardRowElement>
+          ))}
+        </CardRow>
+        {loading ? (
+          <Loader role="status" />
+        ) : (
+          <button
+            onClick={() => {
+              setPageNumber(pageNumber + 1);
+            }}
+          >
+            Voir plus de résultats
+          </button>
+        )}
+      </>
     );
   };
 
