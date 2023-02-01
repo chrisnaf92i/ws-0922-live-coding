@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import { CardRow, CardRowElement } from "./Home.styled";
 import Wilder from "../../components/Wilder/Wilder";
@@ -33,6 +33,31 @@ const Home = () => {
     fetchPolicy: "cache-and-network",
   });
 
+  useEffect(() => {
+    const incrementPageNumberIfBottomReached = () => {
+      const documentBottomReached =
+        window.scrollY + window.innerHeight + 100 >= document.body.clientHeight;
+
+      // console.log({
+      //   scroll: window.scrollY,
+      //   windowHeight: window.innerHeight,
+      //   documentHeight: document.body.clientHeight,
+      //   documentBottomReached,
+      // });
+
+      if (documentBottomReached && !loading) {
+        console.log(`reached bottom of page ${pageNumber}`);
+        setPageNumber(pageNumber + 1);
+      }
+    };
+
+    window.addEventListener("scroll", incrementPageNumberIfBottomReached);
+
+    return () => {
+      window.removeEventListener("scroll", incrementPageNumberIfBottomReached);
+    };
+  }, [pageNumber, loading]);
+
   const renderMainContent = () => {
     if (!data && loading) {
       return <Loader role="status" />;
@@ -58,17 +83,7 @@ const Home = () => {
             </CardRowElement>
           ))}
         </CardRow>
-        {loading ? (
-          <Loader role="status" />
-        ) : (
-          <button
-            onClick={() => {
-              setPageNumber(pageNumber + 1);
-            }}
-          >
-            Voir plus de résultats
-          </button>
-        )}
+        {loading && <Loader role="status" />}
       </>
     );
   };
