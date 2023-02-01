@@ -11,14 +11,17 @@ import {
 
 import Wilder from "../../models/Wilder/Wilder.entity";
 import WilderRepository from "../../models/Wilder/Wilder.repository";
+import PageOfWilders from "./PageOfWilders";
 import { CreateWilderArgs, UpdateWilderArgs } from "./Wilder.input";
 
 const PAGE_SIZE = 9;
 
 @Resolver(Wilder)
 export default class WilderResolver {
-  @Query(() => [Wilder])
-  wilders(@Arg("pageNumber", () => Int) pageNumber: number): Promise<Wilder[]> {
+  @Query(() => PageOfWilders)
+  wilders(
+    @Arg("pageNumber", () => Int) pageNumber: number
+  ): Promise<PageOfWilders> {
     return WilderRepository.getWilders(PAGE_SIZE, pageNumber);
   }
 

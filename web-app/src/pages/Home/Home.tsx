@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { CardRow, CardRowElement } from "./Home.styled";
 import Wilder from "../../components/Wilder/Wilder";
@@ -12,12 +12,16 @@ import { GetWildersQuery, GetWildersQueryVariables } from "../../gql/graphql";
 export const GET_WILDERS = gql`
   query GetWilders($pageNumber: Int!) {
     wilders(pageNumber: $pageNumber) {
-      id
-      firstName
-      lastName
-      skills {
+      nextPageNumber
+      totalCount
+      wilders {
         id
-        skillName
+        firstName
+        lastName
+        skills {
+          id
+          skillName
+        }
       }
     }
   }
@@ -33,6 +37,7 @@ const Home = () => {
     fetchPolicy: "cache-and-network",
   });
 
+  const nextPageNumber = data?.wilders.nextPageNumber;
   useEffect(() => {
     const incrementPageNumberIfBottomReached = () => {
       const documentBottomReached =
@@ -45,7 +50,7 @@ const Home = () => {
       //   documentBottomReached,
       // });
 
-      if (documentBottomReached && !loading) {
+      if (documentBottomReached && !loading && nextPageNumber) {
         console.log(`reached bottom of page ${pageNumber}`);
         setPageNumber(pageNumber + 1);
       }
@@ -56,8 +61,9 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", incrementPageNumberIfBottomReached);
     };
-  }, [pageNumber, loading]);
+  }, [pageNumber, loading, nextPageNumber]);
 
+  const wilders = data?.wilders?.wilders;
   const renderMainContent = () => {
     if (!data && loading) {
       return <Loader role="status" />;
@@ -65,13 +71,13 @@ const Home = () => {
     if (error) {
       return error.message;
     }
-    if (!data?.wilders?.length) {
+    if (!wilders?.length) {
       return "Aucun wilder à afficher.";
     }
     return (
       <>
         <CardRow data-testid="wilder-list">
-          {data.wilders.map((wilder) => (
+          {wilders.map((wilder) => (
             <CardRowElement key={wilder.id} data-testid="wilder-list-element">
               <Wilder
                 id={wilder.id}
@@ -90,7 +96,9 @@ const Home = () => {
 
   return (
     <>
-      <SectionTitle>Wilders</SectionTitle>
+      <SectionTitle>
+        Wilders {wilders?.length ? `(${data?.wilders.totalCount})` : ""}
+      </SectionTitle>
       <Link to={CREATE_WILDER_PATH}>Ajouter un nouveau Wilder</Link>
       <br />
       <br />

@@ -20,8 +20,11 @@ const client = new ApolloClient({
 
             // Concatenate the incoming list items with
             // the existing list items.
-            merge(existing = [], incoming) {
-              return [...existing, ...incoming];
+            merge(existing = { wilders: [] }, incoming) {
+              return {
+                ...incoming,
+                wilders: [...existing.wilders, ...incoming.wilders],
+              };
             },
           },
         },

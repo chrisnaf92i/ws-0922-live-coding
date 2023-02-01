@@ -7,6 +7,7 @@ import Skill from "../Skill/Skill.entity";
 import SkillRepository from "../Skill/Skill.repository";
 import WilderDb from "./Wilder.db";
 import { sendPushNotification } from "../../push-notifications";
+import PageOfWilders from "../../resolvers/Wilder/PageOfWilders";
 
 export default class WilderRepository extends WilderDb {
   static async initializeWilders(): Promise<void> {
@@ -20,7 +21,7 @@ export default class WilderRepository extends WilderDb {
     const phpSkill = (await SkillRepository.getSkillByName("PHP")) as Skill;
 
     const newWilders = Array.from(
-      { length: 1000 },
+      { length: 40 },
       (_, index) =>
         new Wilder(`Jean-${index}`, "Wilder", lyonSchool, [javaScriptSkill])
     );
@@ -31,12 +32,19 @@ export default class WilderRepository extends WilderDb {
   static async getWilders(
     pageSize: number,
     pageNumber: number
-  ): Promise<Wilder[]> {
-    return this.repository.find({
+  ): Promise<PageOfWilders> {
+    const [wilders, totalCount] = await this.repository.findAndCount({
       take: pageSize,
       skip: (pageNumber - 1) * pageSize,
       order: { firstName: "ASC" },
     });
+
+    const numberOfRemainingItems = totalCount - pageSize * pageNumber;
+    return {
+      totalCount,
+      nextPageNumber: numberOfRemainingItems > 0 ? pageNumber + 1 : null,
+      wilders,
+    };
   }
 
   static async createWilder(

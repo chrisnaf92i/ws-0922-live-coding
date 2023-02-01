@@ -30,7 +30,7 @@ const DELETE_WILDERS = gql`
   }
 `;
 
-type PropType = GetWildersQuery["wilders"][number] & {
+type PropType = GetWildersQuery["wilders"]["wilders"][number] & {
   onDelete: () => void;
 };
 

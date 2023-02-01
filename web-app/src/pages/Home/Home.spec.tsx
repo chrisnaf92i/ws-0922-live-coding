@@ -32,7 +32,11 @@ describe("Home", () => {
         },
         result: {
           data: {
-            wilders: [],
+            wilders: {
+              totalCount: 100,
+              nextPageNumber: null,
+              wilders: [],
+            },
           },
         },
       };
@@ -56,20 +60,24 @@ describe("Home", () => {
         },
         result: {
           data: {
-            wilders: [
-              {
-                id: "1234",
-                firstName: "Jean",
-                lastName: "Wilder",
-                skills: [{ id: "js", skillName: "JavaScript" }],
-              },
-              {
-                id: "5678",
-                firstName: "Jeanne",
-                lastName: "Wilder",
-                skills: [{ id: "ts", skillName: "TypeScript" }],
-              },
-            ],
+            wilders: {
+              totalCount: 100,
+              nextPageNumber: null,
+              wilders: [
+                {
+                  id: "1234",
+                  firstName: "Jean",
+                  lastName: "Wilder",
+                  skills: [{ id: "js", skillName: "JavaScript" }],
+                },
+                {
+                  id: "5678",
+                  firstName: "Jeanne",
+                  lastName: "Wilder",
+                  skills: [{ id: "ts", skillName: "TypeScript" }],
+                },
+              ],
+            },
           },
         },
       };
