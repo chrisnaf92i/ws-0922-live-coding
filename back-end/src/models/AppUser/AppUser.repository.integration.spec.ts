@@ -37,6 +37,10 @@ describe("AppUserRepository integration", () => {
         ).rejects.toThrowError(INVALID_CREDENTIALS_ERROR_MESSAGE);
       });
 
+      it("test addition", () => {
+        expect(2 + 2).toEqual(4)
+      })
+
       describe("when email address belongs to existing user", () => {
         const emailAddress = "jean@user.com";
 
