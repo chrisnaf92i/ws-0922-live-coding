@@ -38,7 +38,7 @@ describe("AppUserRepository integration", () => {
       });
 
       it("test addition", () => {
-        expect(2 + 2).toEqual(4)
+        expect(2 + 3).toEqual(5)
       })
 
       describe("when email address belongs to existing user", () => {
